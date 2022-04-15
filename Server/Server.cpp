@@ -13,7 +13,7 @@ CFileException ex;
 
 
 void mailWorking(void* newS) {
-	int c, c1 = 0, c2 = 0, c3 = 0;
+	int c, c1 = 0, c2 = 0, c11=0, c3 = 0;
 	int flag = 0;
 	char p[500], com[200], k[500], m[500];
 	com[0] = '\0'; p[0] = '\0'; k[0] = '\0'; m[0] = '\0';
@@ -41,7 +41,7 @@ void mailWorking(void* newS) {
 				case 1: {
 					strcpy_s(p, "1");
 					send((SOCKET)newS, p, sizeof(p), 0);
-					while (c2 != 3) {
+					while (c2 != 5) {
 						strcpy_s(p, "Работа с инвесторами:\n 1 - Просмотреть данные об инвесторах \n 2 - Удалить инвестора \n 3 - Заключить договор \n 4 - Расторгнуть договор \n 5 - Выход.");
 						send((SOCKET)newS, p, sizeof(p), 0);
 						recv((SOCKET)newS, m, sizeof(m), 0);
@@ -81,8 +81,8 @@ void mailWorking(void* newS) {
 				case 2: {
 					strcpy_s(p, "2");
 					send((SOCKET)newS, p, sizeof(p), 0);
-					while (c2 != 6) {
-						strcpy_s(p, "Работа с экспертами:\n1 - Просмотреть информацию об экспертах \n2 -  Удалить эксперта \n3 - Просомтреть оценки экспертов\n4 - Выход.\n");
+					while (c2 != 4) {
+						strcpy_s(p, "Работа с экспертами:\n1 - Просмотреть информацию об экспертах \n2 - Удалить эксперта \n3 - Просомтреть оценки экспертов\n4 - Выход.\n");
 						send((SOCKET)newS, p, sizeof(p), 0);
 						recv((SOCKET)newS, m, sizeof(m), 0);
 						c2 = atoi(m);
@@ -165,12 +165,12 @@ void mailWorking(void* newS) {
 			strcpy_s(p, "2");
 			send((SOCKET)newS, p, sizeof(p), 0);
 			p[0] = '\0';
-			while (c1 != 4) {
-				strcpy_s(k, "Меню инвестора:\n 1 - Ввести свои инвестиционные данные \n 2 - Редактировать свои данные \n 3 - Удалить данные \n 4 - Просмотреть договоры \n 5 -Выход. ");
+			while (c11 != 5) {
+				strcpy_s(k, "Меню инвестора:\n1 - Ввести свои инвестиционные данные \n2 - Редактировать свои данные \n3 - Удалить данные \n4 - Просмотреть договоры \n5 - Выход. ");
 				send((SOCKET)newS, k, sizeof(k), 0);
 				recv((SOCKET)newS, m, sizeof(m), 0);
-				c1 = atoi(m);
-				switch (c1) {
+				c11 = atoi(m);
+				switch (c11) {
 				case 1: {
 					strcpy_s(p, "1");
 					send((SOCKET)newS, p, sizeof(p), 0);
@@ -198,13 +198,13 @@ void mailWorking(void* newS) {
 				}
 				}
 			}
-			c1 = 0;
+			c11 = 0;
 			break;
 		}
 		case 3: {
 			strcpy_s(p, "3");
 			send((SOCKET)newS, p, sizeof(p), 0);
-			while (c1 != 3) {
+			while (c1 != 4) {
 				strcpy_s(k, "Меню эксперта:\n 1 - Информация об экспертах \n 2 - Выставить оценки для инвесторов \n 3 - Выбрать наилучший вариант\n 4 - Выход. ");
 				send((SOCKET)newS, k, sizeof(k), 0);
 				recv((SOCKET)newS, m, sizeof(m), 0);
@@ -213,7 +213,7 @@ void mailWorking(void* newS) {
 				case 1: {
 					strcpy_s(p, "1");
 					send((SOCKET)newS, p, sizeof(p), 0);
-					while (c2 != 5) {
+					while (c2 != 4) {
 						strcpy_s(k, "Меню просмотра информации об инвесторах:\n 1 - Просмотреть информацию в алфавитном порядке \n 2 - Просмотреть информацию  с фильтрацией по капиталовложениям\n 3 - Поиск по конкретной фамилии \n 4 - Выход\n ");
 						send((SOCKET)newS, k, sizeof(k), 0);
 						recv((SOCKET)newS, m, sizeof(m), 0);

@@ -147,7 +147,7 @@ int main() {
 			break;
 		}
 		case 2: {
-			while (t1 != 4) {
+			while (t1 != 5) {
 				recv(s, k, sizeof(k), 0);
 				cout << k << endl;
 				cin >> t1;
