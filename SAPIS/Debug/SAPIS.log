@@ -1,2 +1,6 @@
 ﻿  Client.cpp
+E:\4 сеееем\курсачкакойтоидиотский\SAPIS\SAPIS\Client.cpp(482,24): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+E:\4 сеееем\курсачкакойтоидиотский\SAPIS\SAPIS\Client.cpp(495,22): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+E:\4 сеееем\курсачкакойтоидиотский\SAPIS\SAPIS\Client.cpp(506,22): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+E:\4 сеееем\курсачкакойтоидиотский\SAPIS\SAPIS\Client.cpp(167): warning C4715: ValueCheck_2: значение возвращается не при всех путях выполнения
   SAPIS.vcxproj -> E:\4 сеееем\курсачкакойтоидиотский\SAPIS\Debug\SAPIS.exe
