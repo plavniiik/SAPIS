@@ -202,6 +202,20 @@ int CheckChoice(int a, int b) //сужает целые числа до опре
 	return choice;
 }
 
+
+int Check_stazh(int a, int b) //сужает целые числа до определённого диапазона (от a до b)
+{
+	int choice = 0;
+	while (choice == 0) {
+		choice = CheckNumber();
+		if ((choice < a) || (choice > b)) {
+			cout << "К сожалению, невозможно работать с таким опытом. " << endl;
+			choice = 0;
+		}
+	}
+	return choice;
+}
+
 int main() {
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
@@ -218,7 +232,7 @@ int main() {
 	peer.sin_addr.s_addr = inet_addr("127.0.0.1");
 	SOCKET s = socket(AF_INET, SOCK_STREAM, 0);
 	connect(s, (struct sockaddr*)&peer, sizeof(peer));
-	char b[500], f[500], k[500], ex[35];
+	char b[500], f[500], k[500], ex[35], buf[500], nuf[500];
 	
 	while (1) {
 		f[0] = '\0';
@@ -238,6 +252,7 @@ int main() {
 		case 1: {
 			char login2[20];
 			char password2[20];
+			int try_1 = 0;
 			system("cls");
 			f[0] = '\0';
 			recv(s, f, sizeof(f), 0);
@@ -245,7 +260,8 @@ int main() {
 			if (strcmp(f, "0") == 0) {
 				
 
-				cout << "Регистрация." << endl;
+				cout << "Администратор еще не зарегистрирован. Давайте пройдем регистрацию." << endl;
+				cout << endl;
 
 				cout << "Введите логин:" << endl;
 				enter_login(login2);
@@ -254,17 +270,74 @@ int main() {
 				strcpy_s(f, login2);
 
 				send(s, f, sizeof(f), 0);
-
+				cout << endl;
 				cout << "Введите пароль:" << endl;
 				enter_logpass(login2, password2);
 				f[0] = '\0';
 				strcpy_s(f, password2);
 				//отправили пароль
 				send(s, f, sizeof(f), 0);
+				cout << endl;
 			}
 			else {
-				cout << "Вход." << endl;
+				cout << "Вход в качестве администратора." << endl;
+				cout << endl;
+				
+				int yyy1 = 0;
+				
+				while (yyy1 == 0) {
+					yyy1 = 0;
+					ex[0] = '\0';
+					cout << endl;
+					cout << "Введите логин:" << endl;
+					enter_login(login2);
+					f[0] = '\0';
+					//отправили логин
+					strcpy(f, login2);
 
+					send(s, f, sizeof(f), 0);
+
+					recv(s, ex, sizeof(ex), 0);//получили сообщение
+					if (strcmp(ex, "0") == 0) {
+						yyy1 = 1;
+					}
+					else {
+						cout << "Логин неверный!" << endl;
+						cout << endl;
+					}
+
+				}
+
+			int yyy2 = 0;
+			
+				while (yyy2 == 0) {
+					yyy2 = 0;
+					ex[0] = '\0';
+					cout << endl;
+					cout << "Введите пароль:" << endl;
+					enter_logpass(login2, password2);
+					f[0] = '\0';
+					//отправили пароль
+					strcpy(f, password2);
+
+					send(s, f, sizeof(f), 0);
+
+					recv(s, ex, sizeof(ex), 0);//получили сообщение
+					if (strcmp(ex, "0") == 0) {
+						yyy2 = 1;
+					}
+					else {
+						cout << endl;
+						cout << "Пароли не совпадают!" << endl;
+						cout << endl;
+						
+					}
+				}
+				cout << endl;
+			cout << "Вход выполнен успешно" << endl;
+			cout << endl;
+			system("pause");
+			system("cls");
 			}
 
 			while (t1 != 5) {
@@ -272,7 +345,7 @@ int main() {
 				cout << k << endl;
 				t1=CheckChoice(1, 5);
 				_itoa_s(t1, b, 10);
-			
+				int check457 = 0;
 				send(s, b, sizeof(b), 0);
 				recv(s, k, sizeof(k), 0);
 				t1 = atoi(k);
@@ -291,7 +364,18 @@ int main() {
 						switch (t2) {
 						case 1: {
 							system("cls");
+							b[0] = '\0';
+							f[0] = '\0';
+							strcpy_s(f, "*");
+							strcpy_s(b, "f");
 
+							while (strcmp(b, f) != 0) {
+								b[0] = '\0';
+								recv(s, b, sizeof(b), 0);
+								if (strcmp(b, "*") != 0) { cout << b << endl; }
+							}
+
+							f[0] = '\0';
 							break;
 						}
 						case 2: {
@@ -341,7 +425,7 @@ int main() {
 								{
 									cout << "Введите стаж работы:" << endl;
 
-									check = check_i();
+									check = Check_stazh(1,55);
 									break;
 								}
 
@@ -364,8 +448,31 @@ int main() {
 
 								check = 0;
 								f[0] = '\0';
+								while (check == 0) {
+									cout << "Введите свою электронную почту" << endl;
+									cin.getline(f, 50, '\n');
+									bool valid = true;
+									int all_presents = 0;
+									string suitable_symbols = "-_.@"; // допустимые символы помимо латинских букв и цифр
 
-								while (check != 2)
+									for (int i = 0; f[i] != '\0'; i++)
+									{
+										if (!isalpha(f[i]) && !isdigit(f[i]) && suitable_symbols.find(f[i]) == std::string::npos) { // наличие недопустимого символа
+											valid = false; break;
+										}
+										if (i > 0 && f[i] == '.' && f[i - 1] == '.') { valid = false; break; } // две точки подряд
+										else if (i > 0 && f[i] == '@' && !all_presents) { all_presents = 1; } // наличие @
+										else if (f[i] == '@' && all_presents) { valid = false; break; } // наличие двух @ в строчке
+										else if ((isalpha(f[i]) || isdigit(f[i])) && all_presents == 1) { all_presents = 2; } // наличие буквы или цифры после @
+										else if (f[i] == '.' && all_presents == 2) { all_presents = 3; } // наличие точки после символа( который после @ )
+										else if (isalpha(f[i]) && all_presents == 3 && f[i + 2] == '\0') { all_presents = 4; } // наличие буквы в конце строчки
+									}
+									if (valid && all_presents == 4) { check = 1; }
+									else { cout << "Почта введена неверно!\n"; }
+								}
+								send(s, f, sizeof(f), 0);
+								
+								/*while (check != 2)
 								{
 									cout << "Введите почту:" << endl;
 									cin.getline(f, 50, '\n');
@@ -374,9 +481,7 @@ int main() {
 										cout << "Неверный ввод, попробуйте ещё раз!" << endl;
 										cout << endl;
 									}
-								}
-								send(s, f, sizeof(f), 0);
-
+								}*/
 
 								char login[20];
 								char password[20];
@@ -407,12 +512,7 @@ int main() {
 								strcpy(f, password);
 								//отправили пароль
 								send(s, f, sizeof(f), 0);
-
-
-
-
 							}
-
 							else {
 								cout << "Уже существует три эксперта. К сожалению больше нельзя!" << endl;
 							}
@@ -421,6 +521,52 @@ int main() {
 						}
 						case 3: {
 							system("cls");
+							//удаление эксперта
+							b[0] = '\0';
+							f[0] = '\0';
+							strcpy_s(f, "*");
+							strcpy_s(b, "f");
+
+							while (strcmp(b, f) != 0) {
+								b[0] = '\0';
+								recv(s, b, sizeof(b), 0);
+								if (strcmp(b, "*") != 0) { cout << b << endl; }
+							}
+
+							f[0] = '\0';
+							cout << endl;
+
+							cout << "Введите фамилию эксперта которого хотитет удалить." << endl;
+
+							check457 = 0;
+							while (check457 != 2)
+							{
+								cin.getline(f, 20, '\n');
+								check457 = ValueCheck_2(f);
+								f[strlen(f)] = '\0';
+								if (check457 == 1) {
+									cout << "Неверный ввод, попробуйте ещё раз!" << endl;
+									cout << endl;
+								}
+							}
+							send(s, f, sizeof(f), 0);
+
+
+							strcpy_s(f, "*");
+							strcpy_s(b, "f");
+
+							while (strcmp(b, f) != 0) {
+								b[0] = '\0';
+								recv(s, b, sizeof(b), 0);
+								if (strcmp(b, "1") == 0) {
+									cout << "Такого эксперта не существует!" << endl;
+									strcpy_s(b, f);
+								}
+								if (strcmp(b, "*") != 0) { cout << b << endl; }
+							}
+							b[0] = '\0';
+							cout << "Эксперт успешно удален" << endl;
+							
 							break;
 						}
 						case 4: {
@@ -447,6 +593,7 @@ int main() {
 						send(s, b, sizeof(b), 0);
 						recv(s, k, sizeof(k), 0);
 						//cout << k << endl;
+						int check456 = 0;
 						t2 = atoi(k);
 						switch (t2) {
 							
@@ -464,7 +611,9 @@ int main() {
 								recv(s, k, sizeof(k), 0);
 								int check = 0;
 								t3 = atoi(k);
+								int checu = 1;
 								switch(t3){
+
 								case 1:
 									system("cls");
 									cout << "Сoртировка" << endl;
@@ -472,6 +621,7 @@ int main() {
 									f[0] = '\0';
 									strcpy_s(f, "*");
 									strcpy_s(b, "f");
+
 									while (strcmp(b, f) != 0) {
 										b[0] = '\0';
 										recv(s, b, sizeof(b), 0);
@@ -484,12 +634,7 @@ int main() {
 								case 2:
 									system("cls");
 									cout << "Фильтрация" << endl;
-
-
 									cout << "Вы можете отфильтровать список по опыту работы на рынке." << endl;
-									
-
-									
 									check = 0;
 									while (check != 2)
 									{
@@ -510,29 +655,65 @@ int main() {
 									}
 									_itoa_s(check, f, 10);
 									send(s, f, sizeof(f), 0);
-									b[0] = '\0';
-									f[0] = '\0';
+
 
 									strcpy_s(f, "*");
+									strcpy_s(b, "f");
 
-									strcpy_s(b, "Такого инвестора нет");
-
-									while ((strcmp(b, f) != 0)) {
+									while (strcmp(b, f) != 0) {
 										b[0] = '\0';
 										recv(s, b, sizeof(b), 0);
+										if (strcmp(b, "1") == 0) {
+											cout << "Такого инвестора не существует!" << endl;
+											strcpy_s(b, f);
+										}
 										if (strcmp(b, "*") != 0) { cout << b << endl; }
 									}
-									f[0] = '\0';
+
+									b[0] = '\0';
+									
+									
 
 									break;
 								case 3:
+
 									system("cls");
 									cout << "Поиск" << endl;
+									
+									check456 = 0;
+
+									while (check456 != 2)
+									{
+										cout << "Введите фамилию для поиска" << endl;
+										cin.getline(f, 20, '\n');
+										check456 = ValueCheck_2(f);
+										f[strlen(f)] = '\0';
+										if (check456 == 1) {
+											cout << "Неверный ввод, попробуйте ещё раз!" << endl;
+											cout << endl;
+										}
+									}
+									send(s, f, sizeof(f), 0);
+
+
+									strcpy_s(f, "*");
+									strcpy_s(b, "f");
+
+									while (strcmp(b, f) != 0) {
+										b[0] = '\0';
+										recv(s, b, sizeof(b), 0);
+										if (strcmp(b, "1") == 0) {
+											cout << "Такого инвестора не существует!" << endl;
+											strcpy_s(b, f);
+										}
+										if (strcmp(b, "*") != 0) { cout << b << endl; }
+									}
+
+									b[0] = '\0';
 
 									break;
 								case 4:
 									system("cls");
-
 									break;
 								}
 							}
@@ -540,6 +721,52 @@ int main() {
 						}
 						case 2: {
 							system("cls");
+							//удаление инвестора
+							b[0] = '\0';
+							f[0] = '\0';
+							strcpy_s(f, "*");
+							strcpy_s(b, "f");
+
+							while (strcmp(b, f) != 0) {
+								b[0] = '\0';
+								recv(s, b, sizeof(b), 0);
+								if (strcmp(b, "*") != 0) { cout << b << endl; }
+							}
+
+							f[0] = '\0';
+							cout << endl;
+
+							cout << "Введите фамилию инвестора которого хотите удалить." << endl;
+
+							check457 = 0;
+							while (check457 != 2)
+							{
+								cin.getline(f, 20, '\n');
+								check457 = ValueCheck_2(f);
+								f[strlen(f)] = '\0';
+								if (check457 == 1) {
+									cout << "Неверный ввод, попробуйте ещё раз!" << endl;
+									cout << endl;
+								}
+							}
+							send(s, f, sizeof(f), 0);
+
+
+							strcpy_s(f, "*");
+							strcpy_s(b, "f");
+
+							while (strcmp(b, f) != 0) {
+								b[0] = '\0';
+								recv(s, b, sizeof(b), 0);
+								if (strcmp(b, "1") == 0) {
+									cout << "Такого инвестора не существует!" << endl;
+									strcpy_s(b, f);
+								}
+								if (strcmp(b, "*") != 0) { cout << b << endl; }
+							}
+							b[0] = '\0';
+							cout << "Эксперт успешно удален" << endl;
+
 							break;
 						}
 						case 3: {
@@ -564,6 +791,60 @@ int main() {
 				//меню изменения логина и пароля
 				case 3: {
 					system("cls");
+					int yyy1 = 0;
+					cout << "Чтобы изменить логин/пароль, пройдите повторную авторизацию." << endl;
+					while (yyy1 == 0) {
+						yyy1 = 0;
+						ex[0] = '\0';
+						cout << endl;
+						cout << "Введите логин:" << endl;
+						enter_login(login2);
+						f[0] = '\0';
+						//отправили логин
+						strcpy(f, login2);
+
+						send(s, f, sizeof(f), 0);
+
+						recv(s, ex, sizeof(ex), 0);//получили сообщение
+						if (strcmp(ex, "0") == 0) {
+							yyy1 = 1;
+						}
+						else {
+							cout << "Логин неверный!" << endl;
+							cout << endl;
+						}
+
+					}
+
+					int yyy2 = 0;
+
+					while (yyy2 == 0) {
+						yyy2 = 0;
+						ex[0] = '\0';
+						cout << endl;
+						cout << "Введите пароль:" << endl;
+						enter_logpass(login2, password2);
+						f[0] = '\0';
+						//отправили пароль
+						strcpy(f, password2);
+
+						send(s, f, sizeof(f), 0);
+
+						recv(s, ex, sizeof(ex), 0);//получили сообщение
+						if (strcmp(ex, "0") == 0) {
+							yyy2 = 1;
+						}
+						else {
+							cout << endl;
+							cout << "Пароли не совпадают!" << endl;
+							cout << endl;
+
+						}
+					}
+					cout << endl;
+					cout << "Подтверждение прошло успешно!" << endl;
+					system("pause");
+					system("cls");
 					while (t2 != 3) {
 						recv(s, k, sizeof(k), 0);
 						cout << k << endl;
@@ -575,10 +856,28 @@ int main() {
 						switch (t2) {
 						case 1: {
 							system("cls");
+							//изменение логина
+							cout << "Введите логин:" << endl;
+							enter_login(login2);
+							f[0] = '\0';
+							//отправили логин
+							strcpy_s(f, login2);
+							send(s, f, sizeof(f), 0);
+							cout << endl;
 							break;
 						}
 						case 2: {
 							system("cls");
+							//изменение пароля
+
+							cout << "Введите пароль:" << endl;
+							enter_logpass(login2, password2);
+							f[0] = '\0';
+							strcpy_s(f, password2);
+							//отправили пароль
+							send(s, f, sizeof(f), 0);
+							cout << endl;
+
 							break;
 						}
 						case 3: {
@@ -711,7 +1010,7 @@ int main() {
 					{
 						cout << "Введите Ваш опыт работы на рынке:" << endl;
 
-						check = check_i();
+						check = Check_stazh(1, 55);
 						break;
 					}
 
@@ -928,7 +1227,7 @@ int main() {
 									{
 										cout << "Введите Ваш опыт работы на рынке:" << endl;
 
-										check = check_i();
+										check = Check_stazh(1, 55);
 										break;
 									}
 

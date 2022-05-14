@@ -219,7 +219,62 @@ public:
 		this->exp = ex;
 	}
 	friend void write_in_file_password_experts(list<Expert> lst);
+
+
+	void write_expert_sort(list<Expert> lst)
+	{
+		
+		list<Expert>::iterator p;
+		ofstream file("Experts_sort.txt", ios_base::out & ios_base::trunc);
+		for (int i = 0; i < 85; i++)
+			file << "-";
+		file << endl;
+		file << "|             Фамилия|       Имя| Стаж|        Должность|                     e-mail|" << endl;
+		for (int i = 0; i < 85; i++)
+			file << "-";
+		file << endl;
+		for (p = lst.begin(); p != lst.end(); p++) {
+			file << "|" << setw(20) << p->Get_F() << "|" << setw(10) << p->Get_I()<<"|"<< setw(5) << p->Get_exp() << "|" << setw(17) << p->Get_position() << "|"<< setw(27) <<p-> Get_email() << "|" << endl;
+		}
+		for (int i = 0; i < 85; i++) {
+			file << "-";
+		}
+			
+		file << endl;
+		file << "*;";
+		file.close();
+	}
+
+
+	int write_expert_search(list<Expert> lst,char* str)
+	{
+		int i = 0;
+		list<Expert>::iterator p;
+		ofstream file("Experts_search.txt", ios_base::out & ios_base::trunc);
+		for (int i = 0; i < 85; i++)
+			file << "-";
+		file << endl;
+		file << "|             Фамилия|       Имя| Стаж|        Должность|                     e-mail|" << endl;
+		for (int i = 0; i < 85; i++)
+			file << "-";
+		file << endl;
+		for (p = lst.begin(); p != lst.end(); p++) {
+			if (strcmp(p->Get_F(), str) == 0) {
+				file << "|" << setw(20) << p->Get_F() << "|" << setw(10) << p->Get_I() << "|" << setw(5) << p->Get_exp() << "|" << setw(17) << p->Get_position() << "|" << setw(27) << p->Get_email() << "|" << endl;
+				i++;
+			}
+			}
+		for (int i = 0; i < 85; i++) {
+			file << "-";
+		}
+
+		file << endl;
+		file << "*;";
+		file.close();
+		return i;
+	}
 	
+
 };
 
 
@@ -422,6 +477,35 @@ public:
 	}
 
 
+	int write_investor_search(list<Investor> lst, char* str)
+	{
+		int i = 0;
+		//lst.sort();
+		list<Investor>::iterator p;
+		ofstream file("Investors_search.txt", ios_base::out & ios_base::trunc);
+		for (int i = 0; i < 55; i++)
+			file << "-";
+		file << endl;
+		file << "|             Фамилия|       Имя|Капитал|Проекты| Стаж|" << endl;
+		for (int i = 0; i < 55; i++)
+			file << "-";
+		file << endl;
+		for (p = lst.begin(); p != lst.end(); p++) {
+			if (strcmp(p->Get_F(),str)==0) {
+				file << "|" << setw(20) << p->Get_F() << "|" << setw(10) << p->Get_I() << "|" << setw(7) << p->Get_capital() << "|" << setw(7) << p->Get_projects() << "|" << setw(5) << p->Get_practice() << "|" << endl;
+				i++;
+			}
+		}
+		for (int i = 0; i < 55; i++) {
+			file << "-";
+		}
+		file << endl;
+		file << "*;";
+		file.close();
+		return i;
+	}
+
+
 	friend void write_in_file_password(list<Investor> lst);
 	friend bool operator<(const Investor& o1, const Investor& o2);
 	friend bool operator>(const Investor& o1, const Investor& o2);
@@ -555,8 +639,8 @@ void read_investors_fromfile(list<Investor>& investors)
 void mailWorking(void* newS) {
 	int c, c1 = 0, c2 = 0, c11 = 0, c3 = 0; int e = 0;
 	int flag = 0;
-	char p[500], com[200], k[500], m[500],q[500];
-	com[0] = '\0'; p[0] = '\0'; k[0] = '\0'; m[0] = '\0'; q[0] = '\0';
+	char p[500], com[200], k[500], m[500],q[500],buf[500];
+	com[0] = '\0'; p[0] = '\0'; k[0] = '\0'; m[0] = '\0'; q[0] = '\0';buf[0]='\0';
 
 	
 	cout << "Сервер работает.\n";
@@ -639,15 +723,82 @@ void mailWorking(void* newS) {
 				m[0] = '\0';
 				strcpy_s(m, "1");
 				send((SOCKET)newS, m, sizeof(m), 0);
+				int try_1 = 0;
+				char ex1[30];
+				char ex21[5];
+				int flag = 0;
+				e = 1;
+				int iteratorr = 0;
 
+				while (e == 1) {
+					flag = 0;
+					recv((SOCKET)newS, m, sizeof(m), 0);
+					cout << m << endl;
+					e = 1;
+					strcpy_s(ex1, "Такого пользователя нет!");
+					strcpy_s(ex21, "0");
+
+					if (admin.size() != 0) {
+						for (it_2 = admin.begin(); it_2 != admin.end(); it_2++) {
+							if (strcmp(m, it_2->Get_log()) == 0) {
+								send((SOCKET)newS, ex21, sizeof(ex21), 0);
+								flag = 1;
+								e = 2;
+								//cout << "Логин существует!" << endl;	
+							}
+						}
+
+						if (flag == 0) {
+							send((SOCKET)newS, ex1, sizeof(ex1), 0);
+
+						}
+					}
+				}
+
+				cout << "Это итth " << iteratorr << endl;
+				e = 0;
+				try_1 = 0;
 				
+					
+					while (e == 0) {
+						flag = 0;
+						//cout << "33333" << m << endl;
+						recv((SOCKET)newS, m, sizeof(m), 0);
+						e = 0;
+						strcpy_s(ex1, "Такого пользователя нет!");
+						strcpy_s(ex21, "0");
+						int it1 = 0;
 
+						if (admin.size() != 0) {
+
+							for (it_2 = admin.begin(); it_2 != admin.end(); it_2++) {
+								cout << endl;
+								cout << it_2->Get_pass() << endl;
+								if (strcmp(m, it_2->Get_pass()) == 0) {
+									send((SOCKET)newS, ex21, sizeof(ex21), 0);
+									flag = 1;
+									e++;
+									//cout << "Пароль совпадает!" << endl;
+								}
+							}
+
+						}
+						if (flag == 0) {
+							send((SOCKET)newS, ex1, sizeof(ex1), 0);
+							
+						}
+
+
+
+					}
+				
+				
 			}
-
 			while (c1 != 5) {
 				strcpy_s(k, "Меню администратора:\n 1 - Раздел работы с экспертами \n 2 - Раздел работы с инвесторами \n 3 - Изменить пароль и/или логин;\n 4 - Информация о компании; \n 5 - Главное меню.\n ");
 				send((SOCKET)newS, k, sizeof(k), 0);
 				recv((SOCKET)newS, m, sizeof(m), 0);
+				
 				c1 = atoi(m);
 				switch (c1) {
 				case 1: {
@@ -660,10 +811,32 @@ void mailWorking(void* newS) {
 						send((SOCKET)newS, p, sizeof(p), 0);
 						recv((SOCKET)newS, m, sizeof(m), 0);
 						c2 = atoi(m);
+						ifstream file5("Experts_sort.txt");
 						switch (c2) {
 						case 1: {
 							strcpy_s(p, "1");
 							send((SOCKET)newS, p, sizeof(p), 0);
+
+
+							expe.write_expert_sort(expert);
+							while (!file5.eof()) {
+								k[0] = '\0';
+								file5.getline(k, 256, '\n');
+								m[0] = '\0';
+								strcpy_s(m, "*");
+								if (file5.eof()) {
+									send((SOCKET)newS, m, sizeof(m), 0);
+								}
+
+								else {
+									send((SOCKET)newS, k, sizeof(k), 0);
+									//cout << k << endl;
+								}
+							}
+
+							file5.close();
+							m[0] = '\0';
+							k[0] = '\0';
 							break;
 						}
 						case 2: {
@@ -758,10 +931,76 @@ void mailWorking(void* newS) {
 							break;
 						}
 						case 3: {
+							ifstream file6("Experts_search.txt");
+							ifstream file7("Experts_sort.txt");
 							strcpy_s(p, "3");
 							send((SOCKET)newS, p, sizeof(p), 0);
+
+
+							expe.write_expert_sort(expert);
+							while (!file7.eof()) {
+								k[0] = '\0';
+								file7.getline(k, 256, '\n');
+								m[0] = '\0';
+								strcpy_s(m, "*");
+								if (file7.eof()) {
+									send((SOCKET)newS, m, sizeof(m), 0);
+								}
+
+								else {
+									send((SOCKET)newS, k, sizeof(k), 0);
+									//cout << k << endl;
+								}
+							}
+
+							file7.close();
+							m[0] = '\0';
+							k[0] = '\0';
+
+
+
+							//получение фамилии
+							recv((SOCKET)newS,buf , sizeof(buf), 0);
+							cout << buf << endl;
+							int temp4 = 0;
+
+							temp4 = expe.write_expert_search(expert,buf);
+
+							if (temp4 == 0) {
+								m[0] = '\0';
+								strcpy_s(m, "1");
+								send((SOCKET)newS, m, sizeof(m), 0);
+							}
+							else {
+								while (!file6.eof()) {
+									k[0] = '\0';
+									file6.getline(k, 256, '\n');
+									m[0] = '\0';
+									strcpy_s(m, "*");
+									if (file6.eof()) {
+										send((SOCKET)newS, m, sizeof(m), 0);
+									}
+
+									else {
+										send((SOCKET)newS, k, sizeof(k), 0);
+										//cout << k << endl;
+									}
+								}
+								file6.close();
+								m[0] = '\0';
+								k[0] = '\0';
+							}
+
+							for (it3 = expert.begin(); it3 != expert.end(); it3++) {
+								
+								if (strcmp(buf, it3->Get_F()) == 0)
+									expert.erase(it3);
+								break;
+							}
+							write_expert_infile(expert);
+							write_in_file_password_experts(expert);
 							break;
-						}
+							}
 						case 4: {
 							strcpy_s(p, "4");
 							send((SOCKET)newS, p, sizeof(p), 0);
@@ -779,7 +1018,7 @@ void mailWorking(void* newS) {
 					c2 = 0;
 					break;
 				}
-					case 2: {
+				case 2: {
 					strcpy_s(p, "2");
 					send((SOCKET)newS, p, sizeof(p), 0);
 					while (c2 != 5) {
@@ -797,15 +1036,18 @@ void mailWorking(void* newS) {
 							menu[0] = '\n';
 							
 							while (c3!=4) {
+								m[0] = '\0';
 								strcpy_s(menu, "Просмотр информации:\n1 - Сортировка \n2 - Фильтрация \n3 - Поиск \n4 - Выход.\n");
 								send((SOCKET)newS, menu, sizeof(menu), 0);
 								recv((SOCKET)newS, m, sizeof(m), 0);
 								c3 = atoi(m);
 								ifstream file("Investors_sort.txt");
 								ifstream file2("Investors_filtr.txt");
+								ifstream file3("Investors_search.txt");
 								int temp = 0;
 								int tem2 = 0;
 								int temp3 = 0;
+								int temp4 = 0;
 								switch (c3) {
 									
 								case 1: {
@@ -856,7 +1098,7 @@ void mailWorking(void* newS) {
 
 									if (temp3 == 0) {
 										m[0] = '\0';
-										strcpy_s(m, "Такого инвестора нет");
+										strcpy_s(m, "1");
 										send((SOCKET)newS, m, sizeof(m), 0);
 									}
 									else {
@@ -887,7 +1129,39 @@ void mailWorking(void* newS) {
 								case 3:
 									strcpy_s(p, "3");
 									send((SOCKET)newS, p, sizeof(p), 0);
+									
 
+									//получение фамилии
+									recv((SOCKET)newS, m, sizeof(m), 0);
+									cout << m << endl;
+
+
+									temp4=invest.write_investor_search(investor,m );
+									
+									if (temp4 == 0) {
+										m[0] = '\0';
+										strcpy_s(m, "1");
+										send((SOCKET)newS, m, sizeof(m), 0);
+									}
+									else {
+										while (!file3.eof()) {
+											k[0] = '\0';
+											file3.getline(k, 256, '\n');
+											m[0] = '\0';
+											strcpy_s(m, "*");
+											if (file3.eof()) {
+												send((SOCKET)newS, m, sizeof(m), 0);
+											}
+
+											else {
+												send((SOCKET)newS, k, sizeof(k), 0);
+												//cout << k << endl;
+											}
+										}
+										file3.close();
+										m[0] = '\0';
+										k[0] = '\0';
+									}
 									break;
 
 								case 4:
@@ -895,13 +1169,79 @@ void mailWorking(void* newS) {
 									send((SOCKET)newS, p, sizeof(p), 0);
 									break;
 								}
-
+								
 							}
+							c3 = 0;
 							break;
 						}
 						case 2: {
+							ifstream file9("Investors_sort.txt");
+							ifstream file10("Investors_search.txt");
 							strcpy_s(p, "2");
 							send((SOCKET)newS, p, sizeof(p), 0);
+
+							invest.write_investor_sort(investor);
+							while (!file9.eof()) {
+								k[0] = '\0';
+								file9.getline(k, 256, '\n');
+								m[0] = '\0';
+								strcpy_s(m, "*");
+								if (file9.eof()) {
+									send((SOCKET)newS, m, sizeof(m), 0);
+								}
+
+								else {
+									send((SOCKET)newS, k, sizeof(k), 0);
+									//cout << k << endl;
+								}
+							}
+
+							file9.close();
+							m[0] = '\0';
+							k[0] = '\0';
+
+							//получение фамилии
+							recv((SOCKET)newS, buf, sizeof(buf), 0);
+							cout << buf << endl;
+							int temp4 = 0;
+
+							temp4 = invest.write_investor_search(investor, buf);
+
+							if (temp4 == 0) {
+								m[0] = '\0';
+								strcpy_s(m, "1");
+								send((SOCKET)newS, m, sizeof(m), 0);
+							}
+							else {
+								while (!file10.eof()) {
+									k[0] = '\0';
+									file10.getline(k, 256, '\n');
+									m[0] = '\0';
+									strcpy_s(m, "*");
+									if (file10.eof()) {
+										send((SOCKET)newS, m, sizeof(m), 0);
+									}
+
+									else {
+										send((SOCKET)newS, k, sizeof(k), 0);
+										//cout << k << endl;
+									}
+								}
+								file10.close();
+								m[0] = '\0';
+								k[0] = '\0';
+							}
+							
+							for (it = investor.begin(); it != investor.end(); it++) {
+
+								if (strcmp(buf, it->Get_F()) == 0) {
+									investor.erase(it);
+									break;
+								}	
+							}
+							write_investor_infile(investor);
+							write_in_file_password(investor);
+							
 							break;
 						}
 						case 3: {
@@ -927,8 +1267,80 @@ void mailWorking(void* newS) {
 				case 3: {
 					strcpy_s(p, "3");
 					send((SOCKET)newS, p, sizeof(p), 0);
+
+					m[0] = '\0';
+					
+					int try_1 = 0;
+					char ex1[30];
+					char ex21[5];
+					int flag = 0;
+					e = 1;
+					int iteratorr = 0;
+
+					while (e == 1) {
+						flag = 0;
+						recv((SOCKET)newS, m, sizeof(m), 0);
+						cout << m << endl;
+						e = 1;
+						strcpy_s(ex1, "Такого пользователя нет!");
+						strcpy_s(ex21, "0");
+
+						if (admin.size() != 0) {
+							for (it_2 = admin.begin(); it_2 != admin.end(); it_2++) {
+								if (strcmp(m, it_2->Get_log()) == 0) {
+									send((SOCKET)newS, ex21, sizeof(ex21), 0);
+									flag = 1;
+									e = 2;
+									//cout << "Логин существует!" << endl;	
+								}
+							}
+
+							if (flag == 0) {
+								send((SOCKET)newS, ex1, sizeof(ex1), 0);
+
+							}
+						}
+					}
+
+					cout << "Это итth " << iteratorr << endl;
+					e = 0;
+					try_1 = 0;
+
+
+					while (e == 0) {
+						flag = 0;
+						//cout << "33333" << m << endl;
+						recv((SOCKET)newS, m, sizeof(m), 0);
+						e = 0;
+						strcpy_s(ex1, "Такого пользователя нет!");
+						strcpy_s(ex21, "0");
+						int it1 = 0;
+
+						if (admin.size() != 0) {
+
+							for (it_2 = admin.begin(); it_2 != admin.end(); it_2++) {
+								cout << endl;
+								cout << it_2->Get_pass() << endl;
+								if (strcmp(m, it_2->Get_pass()) == 0) {
+									send((SOCKET)newS, ex21, sizeof(ex21), 0);
+									flag = 1;
+									e++;
+									//cout << "Пароль совпадает!" << endl;
+								}
+							}
+
+						}
+						if (flag == 0) {
+							send((SOCKET)newS, ex1, sizeof(ex1), 0);
+
+						}
+
+					}
+
+
+			
 					while (c2 != 3) {
-						strcpy_s(p, "Меню изменения пароля и/или логина:\n 1 - Изменить пароль \n 2 - Изменить логин;\n 3 - Выход.\n");
+						strcpy_s(p, "Меню изменения пароля и/или логина:\n 1 - Изменить логин \n 2 - Изменить пароль;\n 3 - Выход.\n");
 						send((SOCKET)newS, p, sizeof(p), 0);
 						recv((SOCKET)newS, m, sizeof(m), 0);
 						c2 = atoi(m);
@@ -936,11 +1348,38 @@ void mailWorking(void* newS) {
 						case 1: {
 							strcpy_s(p, "1");
 							send((SOCKET)newS, p, sizeof(p), 0);
+
+							m[0] = '\0';
+							
+							//получили логин
+							recv((SOCKET)newS, m, sizeof(m), 0);
+							cout << m << endl;
+
+							
+							for (it_2 = admin.begin(); it_2 != admin.end(); it_2++) {
+								
+									it_2->Set_login(m);
+
+							}
+
+							
+							write_in_file_password_admin(admin);
 							break;
 						}
 						case 2: {
 							strcpy_s(p, "2");
 							send((SOCKET)newS, p, sizeof(p), 0);
+							m[0] = '\0';
+							//получили пароль
+							recv((SOCKET)newS, m, sizeof(m), 0);
+							cout << m << endl;
+							for (it_2 = admin.begin(); it_2 != admin.end(); it_2++) {
+
+								it_2->Set_pass(m);
+
+							}
+
+							write_in_file_password_admin(admin);
 							break;
 						}
 						case 3: {
@@ -954,7 +1393,7 @@ void mailWorking(void* newS) {
 					break;
 				}
 				case 4: {
-					strcpy_s(p, "3");
+					strcpy_s(p, "4");
 					send((SOCKET)newS, p, sizeof(p), 0);
 					while (c2 != 3) {
 						strcpy_s(p, "Меню работы с информацией:\n 1 - Добавить информацию о компании \n 2 - Удалить информацию о компании;\n 3 - Выход.\n");
@@ -965,6 +1404,11 @@ void mailWorking(void* newS) {
 						case 1: {
 							strcpy_s(p, "1");
 							send((SOCKET)newS, p, sizeof(p), 0);
+
+
+
+
+
 							break;
 						}
 						case 2: {
@@ -1459,8 +1903,9 @@ void mailWorking(void* newS) {
 			break;
 		}
 		}
-	}
 }
+
+	}
 
 
 int main() {
