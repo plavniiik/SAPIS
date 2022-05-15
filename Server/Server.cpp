@@ -448,6 +448,28 @@ public:
 	}
 
 
+	void write_investor_sort2(list<Investor> lst)
+	{
+		lst.sort();
+		list<Investor>::iterator p;
+		ofstream file("Investors_done2.txt", ios_base::out & ios_base::trunc);
+		for (int i = 0; i < 55; i++)
+			file << "-";
+		file << endl;
+		file << "|             Фамилия|       Имя|Капитал|Проекты| Стаж|" << endl;
+		for (int i = 0; i < 55; i++)
+			file << "-";
+		file << endl;
+		for (p = lst.begin(); p != lst.end(); p++) {
+			file << "|" << setw(20) << p->Get_F() << "|" << setw(10) << p->Get_I() << "|" << setw(7) << p->Get_capital() << "|" << setw(7) << p->Get_projects() << "|" << setw(5) << p->Get_practice() << "|" << endl;
+		}
+		for (int i = 0; i < 55; i++)
+			file << "-";
+		file << endl;
+		file << "*;";
+		file.close();
+	}
+
 	int write_investor_filtration(list<Investor> lst,int min,int max)
 	{
 		int i = 0;
@@ -613,12 +635,253 @@ void read_investors_fromfile(list<Investor>& investors)
 	file.close();
 }
 	class Contract :public Investor {
-	protected:
+	
+		
 
 	};
+
+	void write_investor_app_infile(list<Investor> lst)
+	{
+		list<Investor>::iterator p;
+		ofstream file("Investors_app.txt", ios_base::out & ios_base::trunc);
+		for (p = lst.begin(); p != lst.end(); p++) {
+			file << p->Get_F() << ";" << p->Get_I() << ";" << p->Get_capital() << ";" << p->Get_projects() << ";" << p->Get_practice() << ";";
+		}
+		file << "*;";
+		file.close();
+	}
+
+	void write_investor_del_infile(list<Investor> lst)
+	{
+		list<Investor>::iterator p;
+		ofstream file("Investors_del.txt", ios_base::out & ios_base::trunc);
+		for (p = lst.begin(); p != lst.end(); p++) {
+			file << p->Get_F() << ";" << p->Get_I() << ";" << p->Get_capital() << ";" << p->Get_projects() << ";" << p->Get_practice() << ";";
+		}
+		file << "*;";
+		file.close();
+	}
+
+	void read_investors_fromfile_del(list<Investor>& investors)
+	{
+
+		Investor investor;
+		char str[100];
+		float ff;
+		int k;
+		ifstream f("Investors_del.txt", ios_base::in);
+		if (!f.is_open() || f.peek() == EOF) {
+			cout << "Файл не удалось открыть или он пуст(инвесторы заявки)." << endl;
+			return;
+		}
+
+
+		while (1) {
+			f.getline(str, 100, ';');
+			if (strcmp(str, "*") == 0) {
+				break;
+			}
+			investor.Set_F(str);
+			f.getline(str, 100, ';');
+			investor.Set_I(str);
+			f.getline(str, 100, ';');
+			ff = stof(str);
+			investor.Set_capital(ff);
+			f.getline(str, 100, ';');
+			k = atoi(str);
+			investor.Set_projects(k);
+			f.getline(str, 100, ';');
+			k = 0;
+			k = atoi(str);
+			investor.Set_practice(k);
+
+
+			investors.push_back(investor);
+		}
+		f.close();
+
+	}
+
+	void read_investors_fromfile_app(list<Investor>& investors)
+	{
+
+		Investor investor;
+		char str[100];
+		float ff;
+		int k;
+		ifstream f("Investors_app.txt", ios_base::in);
+		if (!f.is_open() || f.peek() == EOF) {
+			cout << "Файл не удалось открыть или он пуст(инвесторы заявки)." << endl;
+			return;
+		}
+
+
+		while (1) {
+			f.getline(str, 100, ';');
+			if (strcmp(str, "*") == 0) {
+				break;
+			}
+			investor.Set_F(str);
+			f.getline(str, 100, ';');
+			investor.Set_I(str);
+			f.getline(str, 100, ';');
+			ff = stof(str);
+			investor.Set_capital(ff);
+			f.getline(str, 100, ';');
+			k = atoi(str);
+			investor.Set_projects(k);
+			f.getline(str, 100, ';');
+			k = 0;
+			k = atoi(str);
+			investor.Set_practice(k);
+
+
+			investors.push_back(investor);
+		}
+		f.close();
+
+	}
+
+
+	void write_investor_done_infile(list<Investor> lst)
+	{
+		list<Investor>::iterator p;
+		ofstream file("Investors_done.txt", ios_base::out & ios_base::trunc);
+		for (p = lst.begin(); p != lst.end(); p++) {
+			file << p->Get_F() << ";" << p->Get_I() << ";" << p->Get_capital() << ";" << p->Get_projects() << ";" << p->Get_practice() << ";";
+		}
+		file << "*;";
+		file.close();
+	}
+	void read_investors_fromfile_done(list<Investor>& investors)
+	{
+
+		Investor investor;
+		char str[100];
+		float ff;
+		int k;
+		ifstream f("Investors_done.txt", ios_base::in);
+		if (!f.is_open() || f.peek() == EOF) {
+			cout << "Файл не удалось открыть или он пуст(инвесторы заявки)." << endl;
+			return;
+		}
+
+
+		while (1) {
+			f.getline(str, 100, ';');
+			if (strcmp(str, "*") == 0) {
+				break;
+			}
+			investor.Set_F(str);
+			f.getline(str, 100, ';');
+			investor.Set_I(str);
+			f.getline(str, 100, ';');
+			ff = stof(str);
+			investor.Set_capital(ff);
+			f.getline(str, 100, ';');
+			k = atoi(str);
+			investor.Set_projects(k);
+			f.getline(str, 100, ';');
+			k = 0;
+			k = atoi(str);
+			investor.Set_practice(k);
+
+
+			investors.push_back(investor);
+		}
+		f.close();
+
+	}
+
+
 	class Company : public Admin {
+		char name[50];
+		char product[20];
+		char director[20];
+		float money;
+	public:
+		Company() {
+		name[0] = '\0'; product[0] = '\0', money = 0; director[0] = '\0'; } //конструктор без параметров
+		~Company() {};      //пустой деструктор
+		char* Get_name()
+		{
+			return name;
+		}
+		char* Get_product()
+		{
+			return product;
+		}
+		char* Get_director()
+		{
+			return director;
+		}
+		void Set_name(const char* lastname)
+		{
+			strcpy_s(name, lastname);
+		}
 
+		void Set_product(const char* name)
+		{
+			strcpy_s(product, name);
+		}
+
+		float Get_money() {
+			return money;
+		}
+
+		void Set_money(float pr) {
+			this->money = pr;
+		}
+
+		void Set_director(const char* name)
+		{
+			strcpy_s(director, name);
+		}
+
+		void write_company_infile(list<Company> lst)
+		{
+			list<Company>::iterator p;
+			ofstream file("Company.txt", ios_base::out & ios_base::trunc);
+			for (p = lst.begin(); p != lst.end(); p++) {
+				file << p->Get_name() << ";" << p->Get_product() << ";" << p->Get_director() << ";" << p->Get_money() << ";";
+			}
+			file << "*;";
+			file.close();
+		}
 	};
+
+	void read_company_from_file(list<Company>& companyy)
+	{
+		Company company;
+		char str[100];
+		float ff;
+		int k;
+		ifstream f("Company.txt", ios_base::in);
+		if (!f.is_open() || f.peek() == EOF) {
+			cout << "Файл не удалось открыть или он пуст(компания)." << endl;
+			return;
+		}
+		while (1) {
+			f.getline(str, 100, ';');
+			if (strcmp(str, "*") == 0) {
+				break;
+			}
+			company.Set_name(str);
+
+			f.getline(str, 100, ';');
+			company.Set_product(str);
+
+			f.getline(str, 100, ';');
+			company.Set_director(str);
+
+			f.getline(str, 100, ';');
+			ff = stof(str);
+			company.Set_money(ff);
+			companyy.push_back(company);
+		}
+		f.close();
+	}
+	
 
 	class Exception {
 
@@ -647,27 +910,38 @@ void mailWorking(void* newS) {
 	Investor invest;
 	Admin adm;
 	Expert expe;
+	Company comp;
+	Contract cont;
+	
 
 	list<Investor> investor;
-	list<Investor> investor1;
+	list<Investor> investor_app;
+	list<Investor> investor_done;
+	list<Investor> investor_del;
 	list<Admin> admin;
 	list<Expert> expert;
+	list<Company> company;
 
 	list<Investor>::iterator it;
+	list<Investor>::iterator it_app;
+	list<Investor>::iterator it_done;
+	list<Investor>::iterator it_del;
 	list<Admin>::iterator it_2;
 	list<Expert>:: iterator it3;
+	list<Company>::iterator it4;
 
 	char* login_admin;
 	char password_admin[20];
 
 	read_investors_fromfile(investor);
-	
+	read_investors_fromfile_app(investor_app);
 	read_admin_fromfile(admin);
-
 	read_experts_fromfile(expert);
+	read_company_from_file(company);
+	read_investors_fromfile_done(investor_done);
 
 	for (it = investor.begin(); it != investor.end(); it++) {
-		cout << (*it).Get_F() << (*it).Get_I() << (*it).Get_capital() << (*it).Get_projects() << (*it).Get_practice() << (*it).Get_log() << (*it).Get_pass() << endl;
+		cout << (*it).Get_F() << (*it).Get_I() << (*it).Get_capital() << (*it).Get_projects() << (*it).Get_practice()<< "   " << (*it).Get_log()<<"    " << (*it).Get_pass() << "    "<< endl;
 	}
 
 	for (it_2 = admin.begin(); it_2 != admin.end(); it_2++) {
@@ -1049,7 +1323,7 @@ void mailWorking(void* newS) {
 								int temp3 = 0;
 								int temp4 = 0;
 								switch (c3) {
-									
+
 								case 1: {
 									strcpy_s(p, "1");
 									send((SOCKET)newS, p, sizeof(p), 0);
@@ -1076,55 +1350,58 @@ void mailWorking(void* newS) {
 									k[0] = '\0';
 									break;
 								}
-									
-									
-								case 2:
-									strcpy_s(p, "2");
-									send((SOCKET)newS, p, sizeof(p), 0);
-									
-									
 
-									//получение минимального значения
-									recv((SOCKET)newS, m, sizeof(m), 0);
-									cout << m << endl;
-									temp = atoi(m);
-									
-									//получение максимального значения
-									recv((SOCKET)newS, m, sizeof(m), 0);
-									cout << m << endl;
-									tem2 = atoi(m);
 
-									temp3 = invest.write_investor_filtration(investor,temp,tem2);
+								case 2: {
 
-									if (temp3 == 0) {
-										m[0] = '\0';
-										strcpy_s(m, "1");
-										send((SOCKET)newS, m, sizeof(m), 0);
-									}
-									else {
-										while (!file2.eof()) {
-											k[0] = '\0';
-											file2.getline(k, 256, '\n');
-											m[0] = '\0';
-											strcpy_s(m, "*");
-											if (file2.eof()) {
-												send((SOCKET)newS, m, sizeof(m), 0);
-											}
+								
+									  strcpy_s(p, "2");
+									  send((SOCKET)newS, p, sizeof(p), 0);
 
-											else {
-												send((SOCKET)newS, k, sizeof(k), 0);
-												//cout << k << endl;
-											}
-										}
 
-										file2.close();
-										m[0] = '\0';
-										k[0] = '\0';
 
-									}
-									
+									  //получение минимального значения
+									  recv((SOCKET)newS, m, sizeof(m), 0);
+									  cout << m << endl;
+									  temp = atoi(m);
 
-									break;
+									  //получение максимального значения
+									  recv((SOCKET)newS, m, sizeof(m), 0);
+									  cout << m << endl;
+									  tem2 = atoi(m);
+
+									  temp3 = invest.write_investor_filtration(investor, temp, tem2);
+
+									  if (temp3 == 0) {
+										  m[0] = '\0';
+										  strcpy_s(m, "1");
+										  send((SOCKET)newS, m, sizeof(m), 0);
+									  }
+									  else {
+										  while (!file2.eof()) {
+											  k[0] = '\0';
+											  file2.getline(k, 256, '\n');
+											  m[0] = '\0';
+											  strcpy_s(m, "*");
+											  if (file2.eof()) {
+												  send((SOCKET)newS, m, sizeof(m), 0);
+											  }
+
+											  else {
+												  send((SOCKET)newS, k, sizeof(k), 0);
+												  //cout << k << endl;
+											  }
+										  }
+
+										  file2.close();
+										  m[0] = '\0';
+										  k[0] = '\0';
+
+									  }
+
+
+									  break;
+								}
 
 								case 3:
 									strcpy_s(p, "3");
@@ -1247,11 +1524,145 @@ void mailWorking(void* newS) {
 						case 3: {
 							strcpy_s(p, "3");
 							send((SOCKET)newS, p, sizeof(p), 0);
+							//заключение договора с инвестором
+							ifstream file9("Investors_sort.txt");
+							ifstream file10("Investors_search.txt");
+							strcpy_s(p, "2");
+							send((SOCKET)newS, p, sizeof(p), 0);
+
+							invest.write_investor_sort(investor);
+							while (!file9.eof()) {
+								k[0] = '\0';
+								file9.getline(k, 256, '\n');
+								m[0] = '\0';
+								strcpy_s(m, "*");
+								if (file9.eof()) {
+									send((SOCKET)newS, m, sizeof(m), 0);
+								}
+
+								else {
+									send((SOCKET)newS, k, sizeof(k), 0);
+									//cout << k << endl;
+								}
+							}
+
+							file9.close();
+							m[0] = '\0';
+							k[0] = '\0';
+
+							//получение фамилии
+							recv((SOCKET)newS, buf, sizeof(buf), 0);
+							cout << buf << endl;
+							int temp4 = 0;
+
+							temp4 = invest.write_investor_search(investor, buf);
+
+							if (temp4 == 0) {
+								m[0] = '\0';
+								strcpy_s(m, "1");
+								send((SOCKET)newS, m, sizeof(m), 0);
+							}
+							else {
+								while (!file10.eof()) {
+									k[0] = '\0';
+									file10.getline(k, 256, '\n');
+									m[0] = '\0';
+									strcpy_s(m, "*");
+									if (file10.eof()) {
+										send((SOCKET)newS, m, sizeof(m), 0);
+									}
+
+									else {
+										send((SOCKET)newS, k, sizeof(k), 0);
+										//cout << k << endl;
+									}
+								}
+								file10.close();
+								m[0] = '\0';
+								k[0] = '\0';
+							}
+
+							
+							for (it = investor.begin(); it != investor.end(); it++) {
+								if (strcmp(it->Get_F(), buf) == 0) {
+									investor_app.push_back(*it);
+								}
+							}
+							write_investor_app_infile(investor_app);
+
 							break;
 						}
 						case 4: {
+							//расторжение договора с инвестором
+							ifstream file9("Investors_done2.txt");
+							ifstream file10("Investors_search.txt");
+
 							strcpy_s(p, "4");
 							send((SOCKET)newS, p, sizeof(p), 0);
+							invest.write_investor_sort2(investor_done);
+
+							while (!file9.eof()) {
+								k[0] = '\0';
+								file9.getline(k, 256, '\n');
+								m[0] = '\0';
+								strcpy_s(m, "*");
+								if (file9.eof()) {
+									send((SOCKET)newS, m, sizeof(m), 0);
+								}
+
+								else {
+									send((SOCKET)newS, k, sizeof(k), 0);
+									//cout << k << endl;
+								}
+							}
+
+							file9.close();
+							m[0] = '\0';
+							k[0] = '\0';
+
+							//получение фамилии
+							recv((SOCKET)newS, buf, sizeof(buf), 0);
+							cout << buf << endl;
+							int temp4 = 0;
+
+							temp4 = invest.write_investor_search(investor_done, buf);
+
+							if (temp4 == 0) {
+								m[0] = '\0';
+								strcpy_s(m, "1");
+								send((SOCKET)newS, m, sizeof(m), 0);
+							}
+							else {
+								while (!file10.eof()) {
+									k[0] = '\0';
+									file10.getline(k, 256, '\n');
+									m[0] = '\0';
+									strcpy_s(m, "*");
+									if (file10.eof()) {
+										send((SOCKET)newS, m, sizeof(m), 0);
+									}
+
+									else {
+										send((SOCKET)newS, k, sizeof(k), 0);
+										//cout << k << endl;
+									}
+								}
+								file10.close();
+								m[0] = '\0';
+								k[0] = '\0';
+							}
+
+							for (it_done = investor_done.begin(); it_done != investor_done.end(); it_done++) {
+								if (strcmp(it_done->Get_F(), buf) == 0) {
+									investor_del.push_back(*it_done);
+									investor_done.erase(it_done);
+									break;
+								}
+							}
+							write_investor_app_infile(investor_app);
+							write_investor_del_infile(investor_del);
+							write_investor_done_infile(investor_done);
+
 							break;
 						}
 						case 5: {
@@ -1405,6 +1816,46 @@ void mailWorking(void* newS) {
 							strcpy_s(p, "1");
 							send((SOCKET)newS, p, sizeof(p), 0);
 
+							if (company.size() == 0) {
+								p[0] = '\0';
+								strcpy_s(p, "0");
+								send((SOCKET)newS, p, sizeof(p), 0);
+
+								//получение названия компании
+								recv((SOCKET)newS, m, sizeof(m), 0);
+								cout << m << endl;
+								comp.Set_name(m);
+
+								//получение продукта
+								recv((SOCKET)newS, m, sizeof(m), 0);
+								cout << m << endl;
+
+								comp.Set_product(m);
+
+								//получение руководителя
+								recv((SOCKET)newS, m, sizeof(m), 0);
+								cout << m << endl;
+
+								comp.Set_director(m);
+
+								//получение капитала
+								recv((SOCKET)newS, m, sizeof(m), 0);
+								cout << m << endl;
+
+								float temp;
+								temp = stof(m);
+								comp.Set_money(temp);
+
+								company.push_back(comp);
+								comp.write_company_infile(company);
+							}
+
+							else {
+								p[0] = '\0';
+								strcpy_s(p, "1");
+								send((SOCKET)newS, p, sizeof(p), 0);
+
+							}
 
 
 
@@ -1414,6 +1865,22 @@ void mailWorking(void* newS) {
 						case 2: {
 							strcpy_s(p, "2");
 							send((SOCKET)newS, p, sizeof(p), 0);
+
+							if (company.size() == 0) {
+								p[0] = '\0';
+								strcpy_s(p, "0");
+								send((SOCKET)newS, p, sizeof(p), 0);
+							}
+							else {
+								p[0] = '\0';
+								strcpy_s(p, "1");
+								send((SOCKET)newS, p, sizeof(p), 0);
+								for (it4 = company.begin(); it4 != company.end(); it4++) {
+									company.erase(it4);
+									break;
+								}
+								comp.write_company_infile(company);
+							}
 							break;
 						}
 						case 3: {
@@ -1815,6 +2282,216 @@ void mailWorking(void* newS) {
 						case 3: {
 							strcpy_s(p, "3");
 							send((SOCKET)newS, p, sizeof(p), 0);
+							int choice_i = 0;
+							char message[500];
+							char message2[500];
+							char p2[500];
+							int flag2 = 0;
+							int it1 = 0;
+							while (choice_i != 4) {
+								strcpy_s(k, "Выберите пункт, который хотите просмтреть:\n1 - Просмотреть заявки на договор\n2 - Просмотреть заявки на рассторжение договора\n3 - Просмотреть активные договоры\n4 - Выход\nВвведите пункт: ");
+								send((SOCKET)newS, k, sizeof(k), 0);
+								recv((SOCKET)newS, m, sizeof(m), 0);
+								choice_i = atoi(m);
+								switch (choice_i) {
+								case 1: {
+									strcpy_s(p, "1");
+									send((SOCKET)newS, p, sizeof(p), 0);
+
+									p[0] = '\0';
+									p2[0] = '\0';
+
+									for (it = investor.begin(); it != investor.end(); it++) {
+										it1++;
+										if (it1 == iteratorr) {
+											strcpy_s(p, it->Get_F());
+										}
+
+									}
+
+									it1 = 0;
+									message[0] = '\0';
+									message2[0] = '\0';
+
+									strcpy_s(message, "0");
+									strcpy_s(message2, "1");
+
+									for (it_app = investor_app.begin(); it_app != investor_app.end(); it_app++) {
+
+										if (strcmp(p, it_app->Get_F()) == 0) {
+											send((SOCKET)newS, message, sizeof(message), 0);
+											flag2++;
+
+										}
+									}
+
+									if (flag2 == 0) {
+										//у вас нет договоров
+										send((SOCKET)newS, message2, sizeof(message2), 0);
+									}
+
+									else {
+										//есть договор
+										p2[0] = '\0';
+										recv((SOCKET)newS, p2, sizeof(p2), 0);
+										if (strcmp(p2, "1") == 0) {
+
+											cout << "Заявка подтверждена" << endl;
+
+											for (it_app = investor_app.begin(); it_app != investor_app.end(); it_app++) {
+
+												if (strcmp(p, it_app->Get_F()) == 0) {
+
+													investor_done.push_back(*it_app);
+													investor_app.erase(it_app);
+													break;
+												}
+											}
+											write_investor_app_infile(investor_app);
+											write_investor_done_infile(investor_done);
+										}
+
+										else {
+											cout << "Заявка НЕ подтверждена" << endl;
+
+											for (it_app = investor_app.begin(); it_app != investor_app.end(); it_app++) {
+
+												if (strcmp(p, it_app->Get_F()) == 0) {
+													investor_app.erase(it_app);
+													break;
+												}
+											}
+											write_investor_app_infile(investor_app);
+
+										}
+
+
+									}
+									break;
+								}
+
+								case 2: {
+									strcpy_s(p, "2");
+									send((SOCKET)newS, p, sizeof(p), 0);
+									p[0] = '\0';
+									p2[0] = '\0';
+
+									for (it = investor.begin(); it != investor.end(); it++) {
+										it1++;
+										if (it1 == iteratorr) {
+											strcpy_s(p, it->Get_F());
+										}
+
+									}
+
+									it1 = 0;
+									message[0] = '\0';
+									message2[0] = '\0';
+
+									strcpy_s(message, "0");
+									strcpy_s(message2, "1");
+
+									for (it_del = investor_del.begin(); it_del != investor_del.end(); it_del++) {
+
+										if (strcmp(p, it_del->Get_F()) == 0) {
+											send((SOCKET)newS, message, sizeof(message), 0);
+											flag2++;
+
+										}
+									}
+
+									if (flag2 == 0) {
+										//у вас нет договоров
+										send((SOCKET)newS, message2, sizeof(message2), 0);
+									}
+
+									else {
+										//есть договор
+										p2[0] = '\0';
+										recv((SOCKET)newS, p2, sizeof(p2), 0);
+										if (strcmp(p2, "1") == 0) {
+
+											cout << "Заявка на удаление подтверждена" << endl;
+
+											for (it_del = investor_del.begin(); it_del != investor_del.end(); it_del++) {
+
+												if (strcmp(p, it_del->Get_F()) == 0) {
+
+													//investor_done.push_back(*it_app);
+													investor_del.erase(it_del);
+													break;
+												}
+											}
+											write_investor_del_infile(investor_del);
+											//write_investor_done_infile(investor_done);
+										}
+
+										else {
+											cout << "Заявка на удаление НЕ подтверждена" << endl;
+
+											for (it_del = investor_del.begin(); it_del != investor_del.end(); it_del++) {
+
+												if (strcmp(p, it_del->Get_F()) == 0) {
+
+													investor_done.push_back(*it_del);
+													investor_del.erase(it_del);
+													break;
+												}
+											}
+											write_investor_del_infile(investor_del);
+											write_investor_done_infile(investor_done);
+
+										}
+
+									}
+									break;
+									
+								}
+
+								case 3: {
+									strcpy_s(p, "3");
+									
+
+									send((SOCKET)newS, p, sizeof(p), 0);
+
+									for (it = investor.begin(); it != investor.end(); it++) {
+										it1++;
+										if (it1 == iteratorr) {
+											strcpy_s(p, it->Get_F());
+										}
+
+									}
+
+									it1 = 0;
+									message[0] = '\0';
+									message2[0] = '\0';
+
+									strcpy_s(message, "0");
+									strcpy_s(message2, "1");
+
+									for (it_done = investor_done.begin(); it_done != investor_done.end(); it_done++) {
+
+										if (strcmp(p, it_done->Get_F()) == 0) {
+											send((SOCKET)newS, message, sizeof(message), 0);
+											flag2++;
+
+										}
+									}
+
+									if (flag2 == 0) {
+										//у вас нет договоров
+										send((SOCKET)newS, message2, sizeof(message2), 0);
+									}
+									break;
+								}
+								case 4: {
+									strcpy_s(p, "4");
+									send((SOCKET)newS, p, sizeof(p), 0);
+									break;
+								}
+								}
+							}
+							choice_i = 0;
 							break;
 						}
 						case 4: {

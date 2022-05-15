@@ -202,6 +202,19 @@ int CheckChoice(int a, int b) //сужает целые числа до опре
 	return choice;
 }
 
+int CheckChoice2(int a, int b) //сужает целые числа до определённого диапазона (от a до b)
+{
+	int choice = 0;
+	while (choice == 0) {
+		choice = CheckNumber();
+		if ((choice < a) || (choice > b)) {
+			cout << "У вас есть только варианты: да и нет. Выберите цифру: 1/2!" << endl;
+			choice = 0;
+		}
+	}
+	return choice;
+}
+
 
 int Check_stazh(int a, int b) //сужает целые числа до определённого диапазона (от a до b)
 {
@@ -248,7 +261,6 @@ int main() {
 		system("cls");
 		t = atoi(k);
 		switch (t) {
-			
 		case 1: {
 			char login2[20];
 			char password2[20];
@@ -771,10 +783,106 @@ int main() {
 						}
 						case 3: {
 							system("cls");
+							//заключение договра с инвестором
+							b[0] = '\0';
+							f[0] = '\0';
+							strcpy_s(f, "*");
+							strcpy_s(b, "f");
+
+							while (strcmp(b, f) != 0) {
+								b[0] = '\0';
+								recv(s, b, sizeof(b), 0);
+								if (strcmp(b, "*") != 0) { cout << b << endl; }
+							}
+
+							f[0] = '\0';
+							cout << endl;
+
+							cout << "Введите фамилию, с которым хотите заключить договор." << endl;
+
+							check457 = 0;
+							while (check457 != 2)
+							{
+								cin.getline(f, 20, '\n');
+								check457 = ValueCheck_2(f);
+								f[strlen(f)] = '\0';
+								if (check457 == 1) {
+									cout << "Неверный ввод, попробуйте ещё раз!" << endl;
+									cout << endl;
+								}
+							}
+							send(s, f, sizeof(f), 0);
+
+
+							strcpy_s(f, "*");
+							strcpy_s(b, "f");
+
+							while (strcmp(b, f) != 0) {
+								b[0] = '\0';
+								recv(s, b, sizeof(b), 0);
+								if (strcmp(b, "1") == 0) {
+									cout << "Такого инвестора не существует!" << endl;
+									strcpy_s(b, f);
+								}
+								if (strcmp(b, "*") != 0) { cout << b << endl; }
+							}
+							b[0] = '\0';
+
+							cout << endl;
+							cout << "Заявка отправлена на расcмотрение инвестору!"<<endl;
+
 							break;
 						}
 						case 4: {
 							system("cls");
+							//расторжение договора с инвестором
+							b[0] = '\0';
+							f[0] = '\0';
+							strcpy_s(f, "*");
+							strcpy_s(b, "f");
+
+							while (strcmp(b, f) != 0) {
+								b[0] = '\0';
+								recv(s, b, sizeof(b), 0);
+								if (strcmp(b, "*") != 0) { cout << b << endl; }
+							}
+
+							f[0] = '\0';
+							//cout << endl;
+
+							cout << "Введите фамилию иневестора, с которым хотите расторгнуть договор." << endl;
+
+							check457 = 0;
+							while (check457 != 2)
+							{
+								cin.getline(f, 20, '\n');
+								check457 = ValueCheck_2(f);
+								f[strlen(f)] = '\0';
+								if (check457 == 1) {
+									cout << "Неверный ввод, попробуйте ещё раз!" << endl;
+									cout << endl;
+								}
+							}
+							send(s, f, sizeof(f), 0);
+
+
+							strcpy_s(f, "*");
+							strcpy_s(b, "f");
+
+							while (strcmp(b, f) != 0) {
+								b[0] = '\0';
+								recv(s, b, sizeof(b), 0);
+								if (strcmp(b, "1") == 0) {
+									cout << "Такого инвестора нет!" << endl;
+									strcpy_s(b, f);
+								}
+								if (strcmp(b, "*") != 0) { cout << b << endl; }
+							}
+							b[0] = '\0';
+
+							cout << endl;
+							cout << "Заявка на рассторжение!" << endl;
+
 							break;
 						}
 
@@ -903,11 +1011,82 @@ int main() {
 						t2 = atoi(k);
 						switch (t2) {
 						case 1: {
+							int check = 0;
 							system("cls");
+							k[0] = '\0';
+
+							recv(s, k, sizeof(k), 0);
+							
+							if (strcmp(k, "0")==0) {
+								cout << "Давайте зарегистрируем компанию!" << endl;
+								cout << endl;
+								cout << "Введите название компании." << endl;
+								cout << endl;
+								cin.getline(f, 20, '\n');
+								f[strlen(f)] = '\0';
+								send(s, f, sizeof(f), 0);
+
+								cout << "Введите название выпускаемого продукта." << endl;
+								cout << endl;
+								cin.getline(f, 20, '\n');
+								f[strlen(f)] = '\0';
+								
+								send(s, f, sizeof(f), 0);
+
+								check = 0;
+								while (check != 2)
+								{
+									cout << "Введите фамилию ответственного за заключение договора с инвесторами." << endl;
+									cout << endl;
+									cin.getline(f, 20, '\n');
+									check = ValueCheck_2(f);
+									f[strlen(f)] = '\0';
+									if (check == 1) {
+										cout << "Неверный ввод, попробуйте ещё раз!" << endl;
+										cout << endl;
+									}
+								}
+								send(s, f, sizeof(f), 0);
+								check = 0;
+								float cap;
+								while (true)
+								{
+									cout << "Введите желаемую сумму капитала, в которой требуется компания" << endl;
+									cap = check_float();
+									break;
+								}
+
+								sprintf(f, "%.3f", cap);
+								
+								send(s, f, sizeof(f), 0);
+
+
+							}
+
+							else {
+								cout << "Данные о компании уже существуют. Удалите их, прежде чем записать новые данные" << endl;
+								cout << endl;
+							}
+
+
+
 							break;
 						}
 						case 2: {
 							system("cls");
+							k[0] = '\0';
+							recv(s, k, sizeof(k), 0);
+
+							if (strcmp(k, "0") == 0) {
+								cout << "Нам нечего удалять :(" << endl;
+								cout << endl;
+							}
+
+							else {
+								cout << "Данные о компании удалены. Не забудьте записать новые данные." << endl;
+								cout << endl;
+							}
+
 							break;
 						}
 						case 3: {
@@ -929,7 +1108,6 @@ int main() {
 			t1 = 0;
 			break;
 		}  
-		//меню инвестора
 		case 2: {
 			system("cls");
 			int t444 = 0;
@@ -1282,7 +1460,101 @@ int main() {
 						}
 						case 3: {
 							system("cls");
+							char mes[500];
+							char mes2[500];
+							mes[0] = '\0';
+							int t_4 = 0;
+							k[0] = '\0';
+							b[0] = '\0';
+							while (t_4 != 4) {
+								recv(s, k, sizeof(k), 0);
+								cout << k << endl;
+								t_4 = CheckChoice(1, 4);
+								_itoa_s(t_4, b, 10);
+								send(s, b, sizeof(b), 0);
+								recv(s, k, sizeof(k), 0);
+								t_4 = atoi(k);
+								switch (t_4){
+								f[0] = '\0';
+								case 1: {
+									int choiceee;
+									recv(s, mes, sizeof(k), 0);
+									if (strcmp(mes, "0") == 0) {
+										cout << "У вас есть завка на подписание договора!" << endl;
+										cout << endl;
+										cout << "Вы хотите одобрить заявку?\n1 - Да\n2 - Нет." << endl;
+										choiceee = CheckChoice2(1, 2);
+										if (choiceee == 1) {
+											mes2[0] = '\0';
+											strcpy(mes2, "1");
+											send(s, mes2, sizeof(mes2), 0);
+										}
 
+										else {
+											mes2[0] = '\0';
+											strcpy(mes2, "2");
+											send(s, mes2, sizeof(mes2), 0);
+										}
+
+									}
+
+									else {
+										cout << "К сожалению, у вас нет заявок на подписание договора!" << endl;
+										cout << endl;
+									}
+									break;
+								}
+								case 2: {
+									system("cls");
+									int choiceee;
+									recv(s, mes, sizeof(k), 0);
+									if (strcmp(mes, "0") == 0) {
+										cout << "У вас есть завка на рассторжение договора!" << endl;
+										cout << endl;
+										cout << "Вы хотите одобрить заявку?\n1 - Да\n2 - Нет." << endl;
+										choiceee = CheckChoice2(1, 2);
+										if (choiceee == 1) {
+											mes2[0] = '\0';
+											strcpy(mes2, "1");
+											send(s, mes2, sizeof(mes2), 0);
+										}
+
+										else {
+											mes2[0] = '\0';
+											strcpy(mes2, "2");
+											send(s, mes2, sizeof(mes2), 0);
+										}
+
+									}
+
+									else {
+										cout << "У вас нет заявки на рассторжение договора!" << endl;
+										cout << endl;
+									}
+									break;
+								}
+								case 3: {
+									system("cls");
+									
+									recv(s, mes, sizeof(k), 0);
+									if (strcmp(mes, "0") == 0) {
+										cout << "У вас есть подписанные договоры!" << endl;
+									}
+									else {
+										cout << "К сожалению, у вас нет подписанных договоров!" << endl;
+										cout << endl;
+									}
+									
+									break;
+								}
+								case 4: {
+									system("cls");
+									break;
+								}
+
+							}
+							}
+							t_4 = 0;
 							break;
 						}
 						case 4: {
@@ -1377,6 +1649,5 @@ int main() {
 			return 0;
 		}
 		}
-		
 	}
 }
